@@ -1,0 +1,9 @@
+body{
+   height: calc(100vh - 16px); 
+}
+#content-view{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

@@ -5,7 +5,7 @@ let app = new PIXI.Application({
   height: 600,
   backgroundColor: 0x413E3D,
 });
-document.body.appendChild(app.view);
+document.getElementById("content-view").appendChild(app.view);
 const KEYS = {
   LEFT: "ArrowLeft",
   RIGHT: "ArrowRight",
@@ -18,6 +18,7 @@ let paddle,
   lives = 3,
   gameOverText,
   gameWinText,
+  instructionText,
   sound= new Audio("./sounds/bump.mp3");;
 
 function setup() {
@@ -32,6 +33,7 @@ function setup() {
   ball.velocity = 2;
   ball.onPaddle = true;
   ball.start = function () {
+    instructionText.visible = false;
     this.vy = -this.velocity;
     this.vx = random(-this.velocity, this.velocity);
     this.onPaddle = false;
@@ -39,7 +41,7 @@ function setup() {
   app.stage.addChild(ball);
 
   paddle = new PIXI.Graphics();
-  paddle.beginFill(0x66ccff);
+  paddle.beginFill(0xFFFFFF);
   paddle.drawRect(0, 0, 100, 10);
   paddle.endFill();
   paddle.velocity = 6;
@@ -50,6 +52,7 @@ function setup() {
   paddle.fire = function () {
     if (this.ball.onPaddle) {
       this.ball.start();
+      
     }
   };
   paddle.start = function (direction) {
@@ -74,6 +77,15 @@ function setup() {
     }
   };
   app.stage.addChild(paddle);
+  instructionText = new PIXI.Text("Press 'SPACE' to begin!\nPress arrow left and right to control paddle!\nPress 'R' to Restart", {
+    fontSize: 36,
+    fill: 0xffffff,
+    align: "center",
+  });
+  instructionText.x = app.renderer.width / 2 - instructionText.width / 2;
+  instructionText.y = app.renderer.height / 2 - instructionText.height / 2;
+  instructionText.visible = true;
+  app.stage.addChild(instructionText);
 
   createHearts(hearts);
   createBlocks(blocks);
