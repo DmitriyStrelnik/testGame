@@ -3,7 +3,7 @@ import * as PIXI from "./pixi/pixi.mjs";
 let app = new PIXI.Application({
   width: 800,
   height: 600,
-  backgroundColor: 0x1099bb,
+  backgroundColor: 0x413E3D,
 });
 document.body.appendChild(app.view);
 const KEYS = {
@@ -17,7 +17,8 @@ let paddle,
   hearts = [],
   lives = 3,
   gameOverText,
-  gameWinText;
+  gameWinText,
+  sound= new Audio("./sounds/bump.mp3");;
 
 function setup() {
   ball = new PIXI.Graphics();
@@ -110,7 +111,7 @@ function setup() {
     }
   });
   window.addEventListener("keydown", (e) => {
-    if (e.key === "r" || e.key === "R" || e.key === "к") {
+    if (e.code === "KeyR") {
       resetGame();
     }
   });
@@ -139,6 +140,7 @@ function gameLoop(delta) {
     ball.x >= paddle.x &&
     ball.x <= paddle.x + 100
   ) {
+    sound.play();
     let impactPoint = ball.x - (paddle.x + paddle.width / 2);
     ball.vx = impactPoint * 0.1;
     ball.vy *= -1;
@@ -153,6 +155,7 @@ function gameLoop(delta) {
 
   blocks.forEach((block, index) => {
     if (hitTestRectangle(ball, block)) {
+      sound.play();
       ball.vy *= -1;
       app.stage.removeChild(block);
       blocks.splice(index, 1);
@@ -186,7 +189,7 @@ function createBlocks(blocks) {
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
       let block = new PIXI.Graphics();
-      block.beginFill(0x009900);
+      block.beginFill(0xFFFFFF);
       block.drawRect(0, 0, blockWidth, blockHeight);
       block.endFill();
       block.x = j * (blockWidth + 10) + 35;
